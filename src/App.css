@@ -1,38 +1,212 @@
-.App {
-  text-align: center;
+:root {
+	--header: rgba(15, 15, 15, .7);
+	--background: #0f0f0f;
+	--text: #989898;
+	--highlight: #a63d40;
+	--highlight-2: #53f4ff;
+	--sidebar: #4059ad;
+	--sidebar-text: #f0f0f0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+	box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html {
+	scroll-behavior: smooth;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: var(--background);
+    color: var(--text);
+	margin: 0;
+	padding: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+a {
+	color: var(--sidebar-text);
+}
+header {
+	font-family: monospace;
+	color: var(--highlight-2);
+	background: var(--header);
+	padding: .5rem;
+	position: sticky;
+	top: 0;
+	border-bottom: solid 1px var(--text);
 }
 
-.App-link {
-  color: #61dafb;
+header h1 {
+	font-size: 2rem;
+	margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.body-container {
+	margin: 0;
+	padding: 1rem;
+	font-family: monospace;
+	font-size: 1.125rem;
+	line-height: 1.5em;
+	margin-bottom: 40vh;
+	
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.body-container table {
+	table-layout: fixed;
+}
+
+.black-box {
+	background-color: #989898;
+}
+.active-word {
+	background-color: var(--highlight);
+	scroll-margin-top: 30vh;
+}
+
+.selected-active-word {
+	background: var(--highlight-2);
+	color: var(--background);
+}
+
+.guess-box {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	color: var(--sidebar-text);
+	padding: .5rem;
+	background: var(--sidebar);
+	max-height: 35vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border-top: solid 1px var(--text);
+	box-shadow: 0 -1rem 1rem var(--text);
+}
+
+.guess-form {
+	display: flex;
+	max-width: 100%;
+}
+.guess-form input, .guess-form button {
+	display: block;
+	margin: .25rem;
+	font-size: 1rem;
+	padding: .5rem;
+	border: solid 1px var(--text);
+}
+
+.guess-form-submit {
+	color: var(--sidebar-text);
+	background-color: var(--highlight);
+}
+
+.guess-form-up {
+	background: var(--sidebar);
+	color: var(--sidebar-text);
+	border-color: var(--sidebar-text);
+	padding: .5rem .25rem;
+}
+
+.guess-form-input {
+	flex-grow: 1;
+	background: var(--background);
+	color: var(--text);
+	font-family: monospace;
+}
+
+.guesses-list {
+	width: 100%;
+}
+
+.guesses-list td {
+	padding: .25rem;
+}
+
+.guesses-list .number {
+	width: 15%;
+}
+
+.guesses-list .word {
+	max-width: 0;
+	width: 70%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.guesses-list .selected-word {
+	color: var(--highlight-2);
+}
+
+.guesses-list .count {
+	width: 15%;
+	text-align: right;
+}
+
+.main-menu ul {
+	list-style-type: none;
+	margin: 1rem 0 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.main-menu button {
+	white-space: nowrap;
+	border: none;
+	text-decoration: underline;
+	background: transparent;
+	color: var(--sidebar-text);
+	font-size: .825rem;
+}
+
+.infobox {
+	margin: 1rem 1rem 2rem;
+	color: var(--text);	
+	padding: 0 0 2rem;
+	border-bottom: dotted 1px var(--text);
+}
+
+.infobox button {
+	color: var(--sidebar-text);
+	background-color: var(--highlight);
+	font-size: 1rem;
+	padding: .5rem 1rem;
+}
+
+.game-history {
+	border-collapse: collapse;
+}
+.game-history th {
+	text-align: center;
+	color: var(--background);
+	background: var(--text);
+	padding: .5rem 1rem;
+}
+.game-history td {
+	text-align: center;
+	padding: .5rem 1rem;
+	border-bottom: dotted 1px var(--text);
+}
+
+.game-history th.gametitle, .game-history td.gametitle {
+	text-align: left;
+}
+
+@media screen and (min-width: 1000px) {
+	.infobox, .body-container {
+		width: 65vw;
+	}
+	.guess-box {
+		left: initial;
+		top: 0;
+		max-height: initial;
+		width: 30vw;
+		border-top: none;
+		border-left: solid 1px var(--text);
+		box-shadow: -.5rem 0 .5rem var(--text);
+	}
 }
