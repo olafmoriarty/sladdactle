@@ -11,6 +11,7 @@ function InfoBox(props) {
 		<p>Dagens ord er en tilfeldig valgt artikkel som ligger i en av kategoriene "Utmerkede artikler" eller "Anbefalte artikler" på <a href="https://no.wikipedia.org">norsk (bokmål) Wikipedia</a> - nærmere bestemt som lå i en av disse kategoriene 17. august 2022.</p>
 		<p><em>(Merk at i motsetning til engelsk Wikipedia har norsk Wikipedia ingen liste over *viktige* artikler. Det finnes derimot lister over *gode* artikler, og jeg har valgt å bruke disse som utgangspunkt. Det betyr at noen av artiklene kan være noe smalere enn artiklene som benyttes i Redactle - men at de bør være fyldige, ordrike og godt skrevet.)</em></p>
 		<p>En ny oppgave publiseres hver dag klokka 18.00.</p>
+		<p>Hvis du vil lese kildekoden til Sladdactle, finner du den <a href="https://github.com/olafmoriarty/sladdactle">på GitHub</a>.</p>
 		</>,
 		historikk: <GameHistory />,		
 		'personvern': <>
