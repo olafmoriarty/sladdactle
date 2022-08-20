@@ -46,11 +46,26 @@ header h1 {
 	padding: 1rem;
 	font-family: monospace;
 	font-size: 1.125rem;
-	line-height: 1.5em;
+	line-height: 1.6875rem;
 	margin-bottom: 40vh;
 	
 	max-width: 100%;
 	overflow-x: auto;
+}
+
+.body-container h1, .body-container h2 {
+	font-size: 1.6875rem;
+	line-height: 2.53125rem;
+}
+
+.body-container h3 {
+	font-size: 1.31625rem;
+	line-height: 1.974375rem;;
+}
+
+.body-container h4, .body-container h5, .body-container h6 {
+	font-size: 1.125rem;
+	line-height: 1.6875rem;
 }
 
 .body-container table {
