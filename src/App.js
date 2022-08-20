@@ -2,30 +2,21 @@ import { useState, useEffect, useRef, createContext, Children } from 'react';
 import parse from 'html-react-parser';
 import Word from './Word';
 import './App.css';
+
 import GuessBox from './GuessBox';
 import InfoBox from './InfoBox';
+
+import getGameID from './functions/getGameID';
+import getTitleFromID from './functions/getTitleFromID';
+import washWord from './functions/washWord';
 
 export const GuessesContext = createContext([]);
 
 function App() {
+	// Generate game ID
+	const gameID = getGameID();
+	const title = getTitleFromID(gameID);
 
-	// Calculate game ID
-
-	const date1 = new Date(2022, 7, 17);
-	const date2 = new Date();
-	const hour = date2.getHours();
-	date2.setHours(0, 0, 0, 0);
-
-	let gameID = Math.round((date2 - date1) / 86400000) - (hour < 18 ? 1 : 0);
-
-	// Admin user should get tomorrow's game, to catch bugs before they reach everybody
-	if (localStorage.getItem('admin')) {
-		gameID++;
-	}
-
-	let gameList = require('./articleList.json');
-
-	const [title, setTitle] = useState();
 	const [guesses, setGuesses] = useState([]);
 	const [body, setBody] = useState('');
 	const [wordifiedTitle, setWordifiedTitle] = useState('');
@@ -38,17 +29,16 @@ function App() {
 	const [infobox, setInfobox] = useState('');
 	const wordCounter = useRef({});
 
+	// Get arrays of classes/IDs to ignore in parsing, and common words to not redact. All of these vary from language to language, so they are stored in language-specific files.
+	const parsingElements = require('./data/no_parsingElements.json');
+	const {invalidClasses, invalidIds, commonWords} = parsingElements;
+
+	// Also get which punctuation characters should be ignored. These are saved as regular expression, and because some functions require the paranthesis and some require it to not exist, I need to define both versions ...
 	const nonWordCharacters = /([\s\.\,\(\)\-«»\":’\!]+)/;
 	const nonWordCharactersNoParanthesis = /[\s\.\,\(\)\-«»\":’\!]+/;
 
-	const invalidClasses = ['wikitable', 'infobox', 'mw-editsection', 'reference', 'barbox', 'clade', 'Expand_section', 'nowrap', 'IPA', 'thumb', 'mw-empty-elt', 'mw-editsection', 'nounderlines', 'nomobile', 'searchaux', 'sidebar', 'sistersitebox', 'noexcerpt', 'hatnote', 'haudio', 'portalbox', 'mw-references-wrap', 'infobox', 'unsolved', 'navbox', 'metadata', 'refbegin', 'reflist', 'mw-stack', 'reference', 'quotebox', 'collapsible', 'uncollapsed', 'mw-collapsible', 'mw-made-collapsible', 'mbox-small', 'mbox', 'succession-box', 'noprint', 'mwe-math-element', 'cs1-ws-icon', 'catlinks', 'utdypende-artikkel', 'references-small'];
-
-	const invalidIds = ['toc', 'External_links', 'Further_reading', 'Notes', 'References', 'coordinates'];
-
-	const commonWords = ['og', 'i', 'det', 'på', 'som', 'er', 'en', 'til', 'å', 'av', 'for', 'med', 'at', 'var', 'de', 'den', 'om', 'et', 'men', 'så', 'seg', 'fra', 'da', 'ble', 'skal', 'vil', 'etter', 'over', 'ved', 'eller', 'nå', 'dette', 'være', 'mot', 'opp', 'der', 'når', 'inn', 'dem', 'kunne', 'andre', 'blir', 'noen', 'sin', 'må', 'selv', 'sier', 'få', 'kom', 'denne', 'enn', 'bli', 'ville', 'før', 'vært', 'skulle'];
-
 	useEffect(() => {
-		fetchArticle(gameList[gameID % gameList.length]);
+		fetchArticle(title);
 	}, []);
 
 	useEffect(() => {
@@ -87,10 +77,6 @@ function App() {
 			activeWordElements[newActiveWordIndex].scrollIntoView(true);
 			setActiveWordIndex(newActiveWordIndex);
 		}
-	}
-
-	const washWord = word => {
-		return word.toLowerCase().trim();
 	}
 
 	const wordify = el => {
@@ -166,7 +152,6 @@ function App() {
 			let newBodyText = json.parse.text.replace(/<img[^>]*>/g,"").replace(/<small[^>]*>/g,'').replace(/<\/small>/g,'').replace(/â€“/g,'-').replace(/<audio.*<\/audio>/g,"").replace(/\<a [^>]*\>/g,'').replace(/\<\/a\>/g,'');
 			let newBody = parse(newBodyText);
 	
-			setTitle(title);
 			const tmpArray = title.split('(');
 			let newTitleArray = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "");
 	
@@ -235,7 +220,7 @@ function App() {
 				{nothingWorks ? <p>Noe gikk galt :-( Klarte ikke å hente inn dagens artikkel.</p> : (body ? body : <p>Henter dagens artikkel fra Wikipedia ...</p>)}
 				</GuessesContext.Provider>
 			</section>
-			{body ? <GuessBox guesses={guesses} setGuesses={setGuesses} washWord={washWord} wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} nonWordCharacters={nonWordCharacters} commonWords={commonWords} solved={solved} checkIfSolved={checkIfSolved} gameID={gameID} setInfobox={setInfobox} /> : false}
+			{body ? <GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} nonWordCharacters={nonWordCharacters} commonWords={commonWords} solved={solved} checkIfSolved={checkIfSolved} gameID={gameID} setInfobox={setInfobox} /> : false}
 		</div>
 	);
 }

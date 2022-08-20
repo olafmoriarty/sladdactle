@@ -1,8 +1,9 @@
 import {useState} from 'react';
 import GuessesTable from './GuessesTable';
+import washWord from './functions/washWord';
 
 function GuessBox(props) {
-	const {guesses, setGuesses, activeWord, setActiveWord, washWord, solved, wordCounter, nextActiveWord, nonWordCharacters, commonWords, checkIfSolved, gameID, setInfobox} = props;
+	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, nonWordCharacters, commonWords, checkIfSolved, gameID, setInfobox} = props;
 	const [word, setWord] = useState('');
 
 	const submitGuess = (ev) => {
