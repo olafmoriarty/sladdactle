@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {GuessesContext} from './App';
+import {GuessesContext} from '../App';
 
 function Word(props) {
 	const {washedWord, children} = props;

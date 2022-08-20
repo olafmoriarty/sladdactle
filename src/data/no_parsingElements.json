@@ -3,5 +3,7 @@
 	
 	"invalidIds": ["toc", "External_links", "Further_reading", "Notes", "References", "coordinates"],
 	
-	"commonWords": ["og", "i", "det", "på", "som", "er", "en", "til", "å", "av", "for", "med", "at", "var", "de", "den", "om", "et", "men", "så", "seg", "fra", "da", "ble", "skal", "vil", "etter", "over", "ved", "eller", "nå", "dette", "være", "mot", "opp", "der", "når", "inn", "dem", "kunne", "andre", "blir", "noen", "sin", "må", "selv", "sier", "få", "kom", "denne", "enn", "bli", "ville", "før", "vært", "skulle"]
+	"commonWords": ["og", "i", "det", "på", "som", "er", "en", "til", "å", "av", "for", "med", "at", "var", "de", "den", "om", "et", "men", "så", "seg", "fra", "da", "ble", "skal", "vil", "etter", "over", "ved", "eller", "nå", "dette", "være", "mot", "opp", "der", "når", "inn", "dem", "kunne", "andre", "blir", "noen", "sin", "må", "selv", "sier", "få", "kom", "denne", "enn", "bli", "ville", "før", "vært", "skulle"],
+
+	"punctuation": "[\\s.,()\\-«»\":’!]+"
 }

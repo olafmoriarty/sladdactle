@@ -1,5 +1,3 @@
-import React from 'react'
-
 function GuessesTable(props) {
 	const {guesses, activeWord, setActiveWord, wordCounter, nextActiveWord, solved} = props;
 

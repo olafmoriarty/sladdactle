@@ -1,11 +1,16 @@
 import {useState} from 'react';
 import GuessesTable from './GuessesTable';
-import washWord from './functions/washWord';
+import washWord from '../functions/washWord';
 
 function GuessBox(props) {
-	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, nonWordCharacters, commonWords, checkIfSolved, gameID, setInfobox} = props;
+	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, checkIfSolved, gameID, setInfobox} = props;
 	const [word, setWord] = useState('');
 
+	// Get list of punctuation characters to not redact.
+	const parsingElements = require('../data/no_parsingElements.json');
+	const {commonWords, punctuation} = parsingElements;
+	const nonWordCharacters = new RegExp('(' + punctuation + ')');
+	
 	const submitGuess = (ev) => {
 		ev.preventDefault();
 
