@@ -7,6 +7,19 @@ function GuessBox(props) {
 
 	const submitGuess = (ev) => {
 		ev.preventDefault();
+
+		// Secret password to turn on admin mode
+		if (word === 'Skvatarausi rykkja rova') {
+			if (localStorage.getItem('admin')) {
+				localStorage.removeItem('admin');
+				window.location.reload();
+				return;
+			}
+			localStorage.setItem('admin', '1');
+			window.location.reload();
+			return;
+		}
+
 		setInfobox('');
 		let newWord = washWord(word);
 

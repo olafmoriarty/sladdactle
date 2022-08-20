@@ -18,6 +18,11 @@ function App() {
 
 	let gameID = Math.round((date2 - date1) / 86400000) - (hour < 18 ? 1 : 0);
 
+	// Admin user should get tomorrow's game, to catch bugs before they reach everybody
+	if (localStorage.getItem('admin')) {
+		gameID++;
+	}
+
 	let gameList = require('./articleList.json');
 
 	const [title, setTitle] = useState();
