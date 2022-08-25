@@ -3,7 +3,7 @@ import GuessesTable from './GuessesTable';
 import washWord from '../functions/washWord';
 
 function GuessBox(props) {
-	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, checkIfSolved, gameID, setInfobox} = props;
+	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, checkIfSolved, gameID, setInfobox, articleFetched} = props;
 	const [word, setWord] = useState('');
 
 	// Get list of punctuation characters to not redact.
@@ -54,7 +54,7 @@ function GuessBox(props) {
 
 	return (
 		<section className="guess-box">
-		{!solved ? <form className="guess-form" onSubmit={ev => submitGuess(ev)}>
+		{!solved && articleFetched ? <form className="guess-form" onSubmit={ev => submitGuess(ev)}>
 			<button type="button" className="guess-form-up" onClick={(ev => {
 				document.body.scrollTop = 0; // For Safari
 				document.documentElement.scrollTop = 0;

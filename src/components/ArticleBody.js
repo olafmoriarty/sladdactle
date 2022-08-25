@@ -1,11 +1,9 @@
 import {useState, useEffect, Children } from 'react';
-import Word from './Word';
 import parse from 'html-react-parser';
-import washWord from '../functions/washWord';
 import wordify from '../functions/wordify';
 
 function ArticleBody(props) {
-	const {wordCounter, title, wordifiedTitle} = props;
+	const {wordCounter, title, wordifiedTitle, setArticleFetched} = props;
 
 	const [body, setBody] = useState('');
 	const [nothingWorks, setNothingWorks] = useState();
@@ -32,7 +30,7 @@ function ArticleBody(props) {
 			let newBody = parse(newBodyText);
 	
 			setBody(sanitizeChild(newBody));
-	
+			setArticleFetched(true);
 		}
 		catch (e) {
 			setNothingWorks(true);

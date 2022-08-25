@@ -25,6 +25,10 @@ function App() {
 	const wordifiedTitle = wordify(title, wordCounter);
 
 	// STATES:
+
+	// Has the game been loaded?
+	const [articleFetched, setArticleFetched] = useState();
+
 	// Which words has the player guessed so far?
 	const [guesses, setGuesses] = useState([]);
 
@@ -146,9 +150,9 @@ function App() {
 			<InfoBox page={infobox} setInfobox={setInfobox} />
 			{solved ? <div className="infobox">Godt jobba! Du løste <strong><em>{title}</em></strong> på {guesses.length} gjett med en nøyaktighet på {(100 * guesses.filter(g => wordCounter.current[g] > 0).length / guesses.length).toFixed(2)} %. Neste oppgave kommer klokka 18:00.</div> : false}
 			<GuessesContext.Provider value={{guesses: guesses, commonWords: commonWords, solved: solved, activeWord: activeWord}}>
-				<ArticleBody title={title} setGuesses={setGuesses} wordCounter={wordCounter} wordifiedTitle={wordifiedTitle} />
+				<ArticleBody title={title} setGuesses={setGuesses} wordCounter={wordCounter} wordifiedTitle={wordifiedTitle} setArticleFetched={setArticleFetched} />
 			</GuessesContext.Provider>
-			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={gameID} setInfobox={setInfobox} />
+			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={gameID} setInfobox={setInfobox} articleFetched={articleFetched} />
 		</div>
 	);
 }
