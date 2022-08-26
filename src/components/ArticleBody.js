@@ -19,8 +19,10 @@ function ArticleBody(props) {
 
 	// On load fetch today's article from Wikipedia
 	useEffect(() => {
-		fetchArticle(title);
-	}, []);
+		if (title) {
+			fetchArticle(title);
+		}
+	}, [title]);
 
 	const fetchArticle = async title => {
 		try {

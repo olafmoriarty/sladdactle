@@ -17,14 +17,14 @@ function App() {
 	// Create an object to hold word counts. Must be placed in a ref so that I can edit it during parsing
 	const wordCounter = useRef({});
 
-	// Generate game ID
-	const gameID = getGameID();
-
-	// Get game title
-	const title = getTitleFromID(gameID);
-	const wordifiedTitle = wordify(title, wordCounter);
-
 	// STATES:
+
+	// What is this game's ID and title?
+	const [gameID, setGameID] = useState(0);
+	const [title, setTitle] = useState(0);
+
+	// What is the title with <Word> tags added?
+	const [wordifiedTitle, setWordifiedTitle] = useState(0);
 
 	// Has the game been loaded?
 	const [articleFetched, setArticleFetched] = useState();
@@ -52,7 +52,15 @@ function App() {
 	const nonWordCharactersNoParanthesis = new RegExp(punctuation);
 
 	useEffect(() => {
-		generateTitleWordsNotFound(title);
+		const id = getGameID();
+		setGameID(id);
+
+		// Get game title
+		const tmpTitle = getTitleFromID(id);
+		setTitle(tmpTitle);
+		setWordifiedTitle(wordify(tmpTitle, wordCounter));
+
+		generateTitleWordsNotFound(tmpTitle);
 	}, []);
 
 	useEffect(() => {
@@ -80,8 +88,8 @@ function App() {
 		}
 	}, [activeWord]);
 
-	const generateTitleWordsNotFound = () => {
-		const tmpArray = title.split('(');
+	const generateTitleWordsNotFound = tmpTitle => {
+		const tmpArray = tmpTitle.split('(');
 		let newTitleWordsNotFound = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "");
 
 		const storedGuesses = localStorage.getItem('guesses');
