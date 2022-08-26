@@ -54,14 +54,17 @@ function App() {
 	useEffect(() => {
 		const id = getGameID();
 		setGameID(id);
-
-		// Get game title
-		const tmpTitle = getTitleFromID(id);
-		setTitle(tmpTitle);
-		setWordifiedTitle(wordify(tmpTitle, wordCounter));
-
-		generateTitleWordsNotFound(tmpTitle);
 	}, []);
+
+	useEffect(() => {
+		if (gameID) {
+			// Get game title
+			const tmpTitle = getTitleFromID(gameID);
+			setTitle(tmpTitle);
+			setWordifiedTitle(wordify(tmpTitle, wordCounter));
+			generateTitleWordsNotFound(tmpTitle);
+		}
+	}, [gameID]);
 
 	useEffect(() => {
 		const oldActive = document.getElementsByClassName('selected-active-word');
