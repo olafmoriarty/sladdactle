@@ -93,7 +93,7 @@ function App() {
 
 	const generateTitleWordsNotFound = tmpTitle => {
 		const tmpArray = tmpTitle.split('(');
-		let newTitleWordsNotFound = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "");
+		let newTitleWordsNotFound = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "").filter(w => !commonWords.includes(w));
 
 		const storedGuesses = localStorage.getItem('guesses');
 		if (storedGuesses) {
