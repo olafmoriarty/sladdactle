@@ -30,11 +30,13 @@ function ArticleBody(props) {
 			const json = await res.json();
 			let newBodyText = json.parse.text.replace(/<img[^>]*>/g,"").replace(/<small[^>]*>/g,'').replace(/<\/small>/g,'').replace(/â€“/g,'-').replace(/<audio.*<\/audio>/g,"").replace(/\<a [^>]*\>/g,'').replace(/\<\/a\>/g,'');
 			let newBody = parse(newBodyText);
-	
-			setBody(sanitizeChild(newBody));
+			newBody = sanitizeChild(newBody);
+			newBody = wordifyChild(newBody);
+			setBody(newBody);
 			setArticleFetched(true);
 		}
 		catch (e) {
+			console.log(e);
 			setNothingWorks(true);
 		}
 	}
@@ -44,9 +46,6 @@ function ArticleBody(props) {
 			return false;
 		}
 		if (!el.props) {
-			if (typeof el === 'string' && el && el.trim().length) {
-				return wordify(el, wordCounter);
-			}
 			return el;
 		}
 		if (!el.props.children) {
@@ -86,6 +85,24 @@ function ArticleBody(props) {
 		return <Type>{newChild}</Type>;
 	}
 
+	const wordifyChild = el => {
+		if (!el) {
+			return false;
+		}
+		if (!el.props) {
+			if (typeof el === 'string' && el && el.trim().length) {
+				return wordify(el, wordCounter);
+			}
+			return el;
+		}
+		if (!el.props.children) {
+			return el;
+		}
+		const Type = el.type;
+		let newChild;
+		newChild = Children.map(el.props.children, child => wordifyChild(child));
+		return <Type>{newChild}</Type>;
+	}
 
 
 	return (
