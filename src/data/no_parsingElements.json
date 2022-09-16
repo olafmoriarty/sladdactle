@@ -1,5 +1,5 @@
 {
-	"invalidClasses": ["wikitable", "infobox", "mw-editsection", "reference", "barbox", "clade", "Expand_section", "nowrap", "IPA", "thumb", "mw-empty-elt", "mw-editsection", "nounderlines", "nomobile", "searchaux", "sidebar", "sistersitebox", "noexcerpt", "hatnote", "haudio", "portalbox", "mw-references-wrap", "infobox", "unsolved", "navbox", "metadata", "refbegin", "reflist", "mw-stack", "reference", "quotebox", "collapsible", "uncollapsed", "mw-collapsible", "mw-made-collapsible", "mbox-small", "mbox", "succession-box", "noprint", "mwe-math-element", "cs1-ws-icon", "catlinks", "utdypende-artikkel", "references-small"],
+	"invalidClasses": ["wikitable", "infobox", "infoboks", "mw-editsection", "reference", "barbox", "clade", "Expand_section", "nowrap", "IPA", "thumb", "mw-empty-elt", "mw-editsection", "nounderlines", "nomobile", "searchaux", "sidebar", "sistersitebox", "noexcerpt", "hatnote", "haudio", "portalbox", "mw-references-wrap", "infobox", "unsolved", "navbox", "metadata", "refbegin", "reflist", "mw-stack", "reference", "quotebox", "collapsible", "uncollapsed", "mw-collapsible", "mw-made-collapsible", "mbox-small", "mbox", "succession-box", "noprint", "mwe-math-element", "cs1-ws-icon", "catlinks", "utdypende-artikkel", "references-small"],
 	
 	"invalidIds": ["toc", "External_links", "Further_reading", "Notes", "References", "coordinates"],
 	
