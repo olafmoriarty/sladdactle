@@ -8,20 +8,22 @@ const wordify = (el, wordCounter) => {
 	const nonWordCharacters = new RegExp('(' + punctuation + ')');
 	
 	const stringArr = el.replace(/[–−]/g, '-').split(nonWordCharacters);
-	return (<>{stringArr.map(arrEl => {
+	return (<>{stringArr.map((arrEl, index) => {
 		if (arrEl.match(nonWordCharacters)) {
 			return arrEl;
 		}
 		let washedWord = washWord(arrEl);
-		if (washedWord) {
-			if (wordCounter.current[washedWord]) {
-				wordCounter.current[washedWord] = wordCounter.current[washedWord] + 1;
-			}
-			else {
-				wordCounter.current[washedWord] = 1;
+		if (wordCounter) {
+			if (washedWord) {
+				if (wordCounter.current[washedWord]) {
+					wordCounter.current[washedWord] = wordCounter.current[washedWord] + 1;
+				}
+				else {
+					wordCounter.current[washedWord] = 1;
+				}
 			}
 		}
-		return <Word washedWord={washedWord}>{arrEl}</Word>
+		return <Word washedWord={washedWord} key={index}>{arrEl}</Word>
 	})}</>)
 }
 

@@ -4,6 +4,7 @@ import './App.css';
 import ArticleBody from './components/ArticleBody';
 import GuessBox from './components/GuessBox';
 import InfoBox from './components/InfoBox';
+import Statistics from './components/Statistics';
 
 import getGameID from './functions/getGameID';
 import getTitleFromID from './functions/getTitleFromID';
@@ -159,7 +160,7 @@ function App() {
 				<h1>Sladdactle #{gameID}</h1>
 			</header>
 			<InfoBox page={infobox} setInfobox={setInfobox} />
-			{solved ? <div className="infobox">Godt jobba! Du løste <strong><em>{title}</em></strong> på {guesses.length} gjett med en nøyaktighet på {(100 * guesses.filter(g => wordCounter.current[g] > 0).length / guesses.length).toFixed(2)} %. Neste oppgave kommer klokka 18:00.</div> : false}
+			{solved && articleFetched ? <Statistics solved={true} guesses={guesses} wordCounter={wordCounter.current} /> : false}
 			<GuessesContext.Provider value={{guesses: guesses, commonWords: commonWords, solved: solved, activeWord: activeWord}}>
 				<ArticleBody title={title} setGuesses={setGuesses} wordCounter={wordCounter} wordifiedTitle={wordifiedTitle} setArticleFetched={setArticleFetched} />
 			</GuessesContext.Provider>

@@ -1,4 +1,4 @@
-import React from 'react'
+import Statistics from "./Statistics";
 
 function GameHistory() {
 	const storedHistory = localStorage.getItem('history');
@@ -7,6 +7,7 @@ function GameHistory() {
 	}
 	let historyArray = JSON.parse(storedHistory);
 	historyArray.reverse();
+
 	return (
 		<table className="game-history">
 			<thead>
@@ -18,7 +19,7 @@ function GameHistory() {
 				</tr>
 			</thead>
 			<tbody>
-				{historyArray.map(row => <tr>
+				{historyArray.map(row => <tr key={row.gameID}>
 					<td>{row.gameID}</td>
 					<td className="gametitle">{row.title}</td>
 					<td>{row.guesses}</td>
