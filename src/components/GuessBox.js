@@ -3,13 +3,35 @@ import GuessesTable from './GuessesTable';
 import washWord from '../functions/washWord';
 
 function GuessBox(props) {
-	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, checkIfSolved, gameID, setInfobox, articleFetched} = props;
+	const {guesses, setGuesses, activeWord, setActiveWord, solved, wordCounter, nextActiveWord, checkIfSolved, gameID, setInfobox, articleFetched, titleWordsNotFound} = props;
 	const [word, setWord] = useState('');
+	const [showHintButton, setShowHintButton] = useState(false);
 
 	// Get list of punctuation characters to not redact.
 	const parsingElements = require('../data/no_parsingElements.json');
 	const {commonWords, punctuation} = parsingElements;
 	const nonWordCharacters = new RegExp('(' + punctuation + ')');
+
+	const guessWord = w => {
+		setInfobox('');
+		let newWord = washWord(w);
+
+		if (newWord.match(nonWordCharacters)) {
+			return;
+		}
+
+		if (newWord && !guesses.includes(newWord) && !commonWords.includes(newWord)) {
+			const newGuesses = [...guesses, newWord];
+			setGuesses(newGuesses);
+			localStorage.setItem('guesses', JSON.stringify({gameID: gameID, guesses: newGuesses}));
+			setActiveWord(newWord);
+			checkIfSolved(newWord);
+		}
+
+		if (guesses.includes(newWord)) {
+			setActiveWord(newWord);
+		}
+	}
 	
 	const submitGuess = (ev) => {
 		ev.preventDefault();
@@ -26,10 +48,9 @@ function GuessBox(props) {
 			return;
 		}
 
-		setInfobox('');
-		let newWord = washWord(word);
-
-		if (newWord.match(nonWordCharacters)) {
+		if (word === '???') {
+			setShowHintButton(true);
+			setWord('');
 			return;
 		}
 
@@ -38,18 +59,17 @@ function GuessBox(props) {
 			return;
 		}
 
-		if (newWord && !guesses.includes(newWord) && !commonWords.includes(newWord)) {
-			const newGuesses = [...guesses, newWord];
-			setGuesses(newGuesses);
-			localStorage.setItem('guesses', JSON.stringify({gameID: gameID, guesses: newGuesses}));
-			setActiveWord(newWord);
-			checkIfSolved(newWord);
-		}
-
-		if (guesses.includes(newWord)) {
-			setActiveWord(newWord);
-		}
+		guessWord(word);
 		setWord('');
+	}
+
+	const getHint = () => {
+		console.log(wordCounter);
+		let hintArray = [...Object.keys(wordCounter).filter(el => !commonWords.includes(el) && !el.match(/^[\d]+$/) && !guesses.includes(el) && !titleWordsNotFound.includes(el))];
+		hintArray.sort((a, b) => wordCounter[a] - wordCounter[b]);
+		if (hintArray.length) {
+			guessWord(hintArray[Math.floor(Math.random() * 50) % hintArray.length]);
+		}
 	}
 
 	return (
@@ -62,6 +82,8 @@ function GuessBox(props) {
 			<input type="text" name="word" value={word} onChange={(ev) => setWord(ev.target.value)} className="guess-form-input" autoComplete='off' id="guess-input" />
 			<button className="guess-form-submit" type="submit">Gjett</button>
 		</form> : false}
+		{showHintButton ? <p className="hint-button"><button onClick={() => getHint()}>Vis tilfeldig ord</button></p> : false}
+
 		<GuessesTable guesses={guesses} activeWord={activeWord} setActiveWord={setActiveWord} washWord={washWord} wordCounter={wordCounter} nextActiveWord={nextActiveWord} solved={solved} />
 		<nav className="main-menu">
 			<ul>

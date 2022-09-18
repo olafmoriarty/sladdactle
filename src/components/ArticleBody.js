@@ -10,12 +10,7 @@ function ArticleBody(props) {
 
 	// Get arrays of classes/IDs to ignore in parsing, and common words to not redact. All of these vary from language to language, so they are stored in language-specific files.
 	const parsingElements = require('../data/no_parsingElements.json');
-	const {invalidClasses, invalidIds, punctuation} = parsingElements;
-
-	// Also get which punctuation characters should be ignored. These are saved as regular expression, and because some functions require the paranthesis and some require it to not exist, I need to define both versions ...
-	const nonWordCharacters = new RegExp('(' + punctuation + ')');
-	
-	
+	const {invalidClasses, invalidIds} = parsingElements;
 
 	// On load fetch today's article from Wikipedia
 	useEffect(() => {
@@ -29,7 +24,7 @@ function ArticleBody(props) {
 		try {
 			const res = await fetch('https://no.wikipedia.org/w/api.php?action=parse&format=json&page=' + title + '&prop=text&formatversion=2&origin=*');
 			const json = await res.json();
-			let newBodyText = json.parse.text.replace(/<img[^>]*>/g,"").replace(/<small[^>]*>/g,'').replace(/<\/small>/g,'').replace(/â€“/g,'-').replace(/<audio.*<\/audio>/g,"").replace(/\<a [^>]*\>/g,'').replace(/\<\/a\>/g,'');
+			let newBodyText = json.parse.text.replace(/<img[^>]*>/g,"").replace(/<small[^>]*>/g,'').replace(/<\/small>/g,'').replace(/â€“/g,'-').replace(/<audio.*<\/audio>/g,"").replace(/<a [^>]*>/g,'').replace(/<\/a>/g,'');
 			let newBody = parse(newBodyText);
 			newBody = sanitizeChild(newBody);
 			newBody = wordifyChild(newBody);

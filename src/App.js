@@ -216,7 +216,7 @@ function App() {
 				</> : false}
 				<ArticleBody title={title} setGuesses={setGuesses} wordCounter={wordCounter} wordifiedTitle={wordifiedTitle} setArticleFetched={setArticleFetched} />
 			</GuessesContext.Provider>
-			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={currentGameID} setInfobox={changeInfobox} articleFetched={articleFetched} />
+			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={currentGameID} setInfobox={changeInfobox} articleFetched={articleFetched} titleWordsNotFound={titleWordsNotFound} />
 		</div>
 	);
 }
