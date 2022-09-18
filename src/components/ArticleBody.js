@@ -19,6 +19,7 @@ function ArticleBody(props) {
 
 	// On load fetch today's article from Wikipedia
 	useEffect(() => {
+		setBody(false);
 		if (title) {
 			fetchArticle(title);
 		}

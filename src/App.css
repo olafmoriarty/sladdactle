@@ -6,6 +6,11 @@
 	--highlight-2: #53f4ff;
 	--sidebar: #4059ad;
 	--sidebar-text: #f0f0f0;
+	--monofont: monospace;
+	--body-font: Arial, Helvetica, sans-serif;
+
+	--guesses-text: "Gjett: ";
+	--precision-text: "Nøyaktighet: ";
 }
 
 * {
@@ -16,7 +21,7 @@ html {
 	scroll-behavior: smooth;
 }
 body {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: var(--body-font);
 	background-color: var(--background);
     color: var(--text);
 	margin: 0;
@@ -26,8 +31,21 @@ body {
 a {
 	color: var(--sidebar-text);
 }
+
+button.link {
+	font-family: var(--body-font);
+	font-size: 1rem;
+	background: transparent;
+	border: none;
+	display: inline;
+	color: var(--sidebar-text);
+	text-decoration: underline;
+	padding: 0;
+
+}
+
 header {
-	font-family: monospace;
+	font-family: var(--monofont);
 	color: var(--highlight-2);
 	background: var(--header);
 	padding: .5rem;
@@ -44,7 +62,7 @@ header h1 {
 .body-container {
 	margin: 0;
 	padding: 1rem;
-	font-family: monospace;
+	font-family: var(--monofont);
 	font-size: 1.125rem;
 	line-height: 1.6875rem;
 	margin-bottom: 40vh;
@@ -128,7 +146,7 @@ header h1 {
 	flex-grow: 1;
 	background: var(--background);
 	color: var(--text);
-	font-family: monospace;
+	font-family: var(--monofont);
 }
 
 .guesses-list {
@@ -178,11 +196,21 @@ header h1 {
 	font-size: .825rem;
 }
 
+.old-info {
+	margin: 1rem 1rem;
+	color: var(--text);	
+	padding: 0;
+	text-align: center;
+}
+
 .infobox {
 	margin: 1rem 1rem 2rem;
 	color: var(--text);	
 	padding: 0 0 2rem;
 	border-bottom: dotted 1px var(--text);
+
+	max-width: 100%;
+	overflow-x: auto;
 }
 
 .infobox button {
@@ -194,6 +222,7 @@ header h1 {
 
 .game-history {
 	border-collapse: collapse;
+	width: 100%;
 }
 .game-history th {
 	text-align: center;
@@ -209,6 +238,21 @@ header h1 {
 
 .game-history th.gametitle, .game-history td.gametitle {
 	text-align: left;
+}
+
+.game-history td.gametitle {
+	font-family: var(--monofont);
+	font-size: 1.125rem;
+}
+
+.game-history td.gametitle button {
+	font-family: var(--monofont);
+	font-size: 1.125rem;
+	background: transparent;
+	border: none;
+	display: inline;
+	color: var(--sidebar-text);
+	padding: 0;
 }
 
 .statistics {
@@ -234,8 +278,46 @@ header h1 {
 	white-space: nowrap;
 }
 
+@media screen and (max-width: 1000px) {
+	.game-history tr {
+		display: block;
+		margin-bottom: 1rem;
+		border: solid 1px var(--text);
+	}
+	.game-history tr:first-child {
+		display: none;
+	}
+	.game-history th {
+		display: none;
+	}
+	.game-history td {
+		display: block;
+	}
+	.game-history td.game-id::before {
+		content: "#";
+	}
+	.game-history td.game-id::after {
+		content: ":";
+	}
+	.game-history td.gametitle {
+		text-align: center;
+	}
+	.game-history td.empty {
+		display: none;
+	}
+	.game-history td.game-guesses::before {
+		content: var(--guesses-text);
+	}
+	.game-history td.game-precision::before {
+		content: var(--precision-text);
+	}
+	.game-history td:last-child {
+		border-bottom: none;
+	}
+}
+
 @media screen and (min-width: 1000px) {
-	.infobox, .body-container, .statistics {
+	.infobox, .old-info, .body-container, .statistics {
 		width: 65vw;
 	}
 	.statistics {

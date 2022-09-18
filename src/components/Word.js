@@ -2,13 +2,13 @@ import {useContext} from 'react';
 import {GuessesContext} from '../App';
 
 function Word(props) {
-	const {washedWord, children} = props;
+	const {washedWord, children, redactAll} = props;
 	const {guesses, commonWords, solved, activeWord} = useContext(GuessesContext);
 
-	if (solved || !washedWord) {
+	if ((solved && !redactAll) || !washedWord) {
 		return children;
 	}
-	if (!guesses.includes(washedWord) && !commonWords.includes(washedWord)) {
+	if ((redactAll || !guesses.includes(washedWord)) && !commonWords.includes(washedWord)) {
 		let blackBox = '';
 		for (let i = 0; i < children.length; i++) {
 			blackBox += '█';

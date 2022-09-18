@@ -22,6 +22,7 @@ function App() {
 
 	// What is this game's ID and title?
 	const [gameID, setGameID] = useState(0);
+	const [currentGameID, setCurrentGameID] = useState(0);
 	const [title, setTitle] = useState(0);
 
 	// What is the title with <Word> tags added?
@@ -55,17 +56,24 @@ function App() {
 	useEffect(() => {
 		const id = getGameID();
 		setGameID(id);
+
+		const storedID = localStorage.getItem('currentID');
+		setCurrentGameID(storedID ? storedID : id);
 	}, []);
 
 	useEffect(() => {
-		if (gameID) {
+		setGuesses([]);
+		setSolved(false);
+		wordCounter.current = {};
+		if (currentGameID) {
 			// Get game title
-			const tmpTitle = getTitleFromID(gameID);
+			const tmpTitle = getTitleFromID(currentGameID);
 			setTitle(tmpTitle);
 			setWordifiedTitle(wordify(tmpTitle, wordCounter));
 			generateTitleWordsNotFound(tmpTitle);
+			setInfobox('');
 		}
-	}, [gameID]);
+	}, [currentGameID]);
 
 	useEffect(() => {
 		const oldActive = document.getElementsByClassName('selected-active-word');
@@ -92,14 +100,26 @@ function App() {
 		}
 	}, [activeWord]);
 
+	const changeInfobox = value => {
+		document.body.scrollTop = 0; // For Safari
+		document.documentElement.scrollTop = 0;
+		setInfobox(value);
+	}
+
 	const generateTitleWordsNotFound = tmpTitle => {
 		const tmpArray = tmpTitle.split('(');
 		let newTitleWordsNotFound = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "").filter(w => !commonWords.includes(w));
 
+		const oldHistory = localStorage.getItem('history');
+		let historyArray = [];
+		if (oldHistory) {
+			historyArray = JSON.parse(oldHistory);
+		}
+
 		const storedGuesses = localStorage.getItem('guesses');
 		if (storedGuesses) {
 			const gameObject = JSON.parse(storedGuesses);
-			if (gameObject.gameID === gameID) {
+			if (gameObject.gameID == currentGameID) {
 				setGuesses(gameObject.guesses);
 				gameObject.guesses.forEach(g => {
 					newTitleWordsNotFound = newTitleWordsNotFound.filter(w => w !== g);
@@ -107,11 +127,38 @@ function App() {
 			}
 		}
 
-		if (newTitleWordsNotFound.length === 0) {
+		if (newTitleWordsNotFound.length === 0 || historyArray.map(o => o.gameID).includes(currentGameID)) {
 			setSolved(true);
 		}
 
 		setTitleWordsNotFound(newTitleWordsNotFound);
+	}
+
+	const changeGameID = newID => {
+		// Cancel function if ID is too high
+		if (newID > gameID) {
+			return false;
+		}
+
+		//  Cancel function if clicked puzzle is the same as active puzzle
+		if (newID == currentGameID) {
+			return false;
+		}
+
+		// Ask player if they really want to change game ID
+		if (guesses.length && !solved) {
+			const wantsToChange = window.confirm('Er du sikker på at du vil bytte oppgave? Når du bytter oppgave, vil all framgang i oppgaven du holder på med bli slettet!');
+			if (!wantsToChange) {
+				return false;
+			}
+		}
+		setCurrentGameID(newID);
+		if (newID == gameID) {
+			localStorage.removeItem('currentID');
+		}
+		else {
+			localStorage.setItem('currentID', newID);
+		}
 	}
 
 	const nextActiveWord = () => {
@@ -132,15 +179,16 @@ function App() {
 		if (newTitleWordsNotFound.length === 0) {
 			// Solved!
 			setSolved(true);
+			localStorage.removeItem('currentID');
 
 			let historyArray = [];
 			const oldHistory = localStorage.getItem('history');
 			if (oldHistory) {
 				historyArray = JSON.parse(oldHistory);
 			}
-			if (!historyArray.length || !historyArray.map(o => o.gameID).includes(gameID)) {
+			if (!historyArray.length || !historyArray.map(o => o.gameID).includes(currentGameID)) {
 				historyArray.push({
-					gameID: gameID,
+					gameID: currentGameID,
 					title: title,
 					guesses: guesses.length + 1,
 					precision: guesses.map(g => wordCounter.current[g]).filter(n => n > 0).length + 1,
@@ -157,14 +205,18 @@ function App() {
 	return (
     	<div className="App">
 			<header>
-				<h1>Sladdactle #{gameID}</h1>
+				<h1>Sladdactle #{currentGameID}</h1>
 			</header>
-			<InfoBox page={infobox} setInfobox={setInfobox} />
-			{solved && articleFetched ? <Statistics solved={true} guesses={guesses} wordCounter={wordCounter.current} /> : false}
+			{currentGameID != gameID ? <p className="old-info">Dette er en oppgave fra arkivet. <button className="link" onClick={() => changeGameID(gameID)}>Bytt til dagens oppgave</button></p> : false}
 			<GuessesContext.Provider value={{guesses: guesses, commonWords: commonWords, solved: solved, activeWord: activeWord}}>
+				<InfoBox page={infobox} setInfobox={changeInfobox} changeGameID={changeGameID} />
+				{solved && articleFetched ? <>
+					<Statistics solved={true} guesses={guesses} wordCounter={wordCounter.current} currentGameID={currentGameID} />
+					<p className="old-info"><button className="link" onClick={() => setInfobox('historikk')}>Gå til oppgavearkivet</button></p>
+				</> : false}
 				<ArticleBody title={title} setGuesses={setGuesses} wordCounter={wordCounter} wordifiedTitle={wordifiedTitle} setArticleFetched={setArticleFetched} />
 			</GuessesContext.Provider>
-			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={gameID} setInfobox={setInfobox} articleFetched={articleFetched} />
+			<GuessBox guesses={guesses} setGuesses={setGuesses}  wordCounter={wordCounter.current} activeWord={activeWord} setActiveWord={setActiveWord} nextActiveWord={nextActiveWord} solved={solved} checkIfSolved={checkIfSolved} gameID={currentGameID} setInfobox={changeInfobox} articleFetched={articleFetched} />
 		</div>
 	);
 }

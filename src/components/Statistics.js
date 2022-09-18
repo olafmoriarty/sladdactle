@@ -1,10 +1,27 @@
 import getGameID from '../functions/getGameID';
 
 function Statistics(props) {
-	const {guesses, solved, wordCounter} = props;
+	const {guesses, solved, wordCounter, currentGameID} = props;
 	const gameID = getGameID();
 	let streak = 0;
 	let solvedPuzzles = [];
+
+	let showGuesses = guesses.length;
+	let showPrecision = guesses.filter(g => wordCounter[g] > 0).length / guesses.length;
+
+	if (!showGuesses) {
+		const oldHistory = localStorage.getItem('history');
+		let historyArray = [];
+		if (oldHistory) {
+			historyArray = JSON.parse(oldHistory);
+			historyArray = historyArray.filter(el => el.gameID == currentGameID);
+		}
+		if (historyArray.length) {
+			showGuesses = historyArray[0].guesses;
+			showPrecision = historyArray[0].precision / historyArray[0].guesses;
+		}
+
+	} 
 
 	const storedHistory = localStorage.getItem('history');
 
@@ -24,15 +41,15 @@ function Statistics(props) {
 	}
 
 	return (
-		<div class="statistics">
+		<div className="statistics">
 			{solved && guesses && wordCounter ? <>
 				<div>
 					<h2>Antall gjett</h2>
-					<p>{guesses.length}</p>
+					<p>{showGuesses}</p>
 				</div>
 				<div>
 					<h2>Nøyaktighet</h2>
-					<p>{(100 * guesses.filter(g => wordCounter[g] > 0).length / guesses.length).toFixed(2)} %</p>
+					<p>{(100 * showPrecision).toFixed(2)} %</p>
 				</div>
 			</> : false}
 			<div><h2>Oppgaver løst</h2><p>{solvedPuzzles.length}</p></div>

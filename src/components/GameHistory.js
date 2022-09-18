@@ -1,13 +1,41 @@
-import Statistics from "./Statistics";
+import getGameID from "../functions/getGameID";
+import wordify from "../functions/wordify";
 
-function GameHistory() {
-	const storedHistory = localStorage.getItem('history');
-	if (!storedHistory) {
-		return <p>Du har ikke løst noen Sladdactle-oppgaver ennå og det er derfor ingen historikk å vise.</p>
+function GameHistory(props) {
+	const {changeGameID} = props;
+	let pastGames = {};
+	const gameID = getGameID();
+	let gameList = require('../data/no_articleList.json');
+
+	for (let i = gameID; i > 0; i--) {
+		pastGames[i] = {
+			gameID: i,
+			title: gameList[i % gameList.length],
+		};
 	}
-	let historyArray = JSON.parse(storedHistory);
-	historyArray.reverse();
 
+	const storedHistory = localStorage.getItem('history');
+	let historyArray = [];
+	if (storedHistory) {
+		historyArray = JSON.parse(storedHistory);
+	}
+
+	historyArray.forEach(row => {
+		pastGames[row.gameID] = {
+			...pastGames[row.gameID],
+			...row,
+			solved: true,
+		}
+	});
+
+	let pastGamesArray = [];
+	for (let i = gameID; i > 0; i--) {
+		if (pastGames[i]) {
+			pastGamesArray.push(pastGames[i]);
+		}
+	}
+
+	
 	return (
 		<table className="game-history">
 			<thead>
@@ -19,11 +47,11 @@ function GameHistory() {
 				</tr>
 			</thead>
 			<tbody>
-				{historyArray.map(row => <tr key={row.gameID}>
-					<td>{row.gameID}</td>
-					<td className="gametitle">{row.title}</td>
-					<td>{row.guesses}</td>
-					<td>{(row.precision / row.guesses * 100).toFixed(2)} %</td>
+				{pastGamesArray.map(row => <tr key={row.gameID}>
+					<td className="game-id">{row.gameID}</td>
+					<td className="gametitle">{row.solved ? row.title : <button onClick={() => changeGameID(row.gameID)}>{wordify(row.title)}</button>}</td>
+					<td className={`game-guesses${row.solved ? "" : " empty"}`}>{row.solved ? row.guesses : ""}</td>
+					<td className={`game-precision${row.solved ? "" : " empty"}`}>{row.solved ? (row.precision / row.guesses * 100).toFixed(2) + " %" : ""}</td>
 				</tr>)}
 			</tbody>
 		</table>

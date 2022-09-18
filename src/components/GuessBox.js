@@ -66,7 +66,7 @@ function GuessBox(props) {
 		<nav className="main-menu">
 			<ul>
 				<li><button onClick={() => setInfobox('om')}>Om</button></li>
-				<li><button onClick={() => setInfobox('historikk')}>Historikk</button></li>
+				<li><button onClick={() => setInfobox('historikk')}>Alle oppgaver</button></li>
 				<li><button onClick={() => setInfobox('personvern')}>Personvern</button></li>
 			</ul>
 		</nav>

@@ -23,7 +23,7 @@ const wordify = (el, wordCounter) => {
 				}
 			}
 		}
-		return <Word washedWord={washedWord} key={index}>{arrEl}</Word>
+		return <Word washedWord={washedWord} redactAll={wordCounter ? false : true} key={index}>{arrEl}</Word>
 	})}</>)
 }
 
