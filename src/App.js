@@ -108,7 +108,7 @@ function App() {
 
 	const generateTitleWordsNotFound = tmpTitle => {
 		const tmpArray = tmpTitle.split('(');
-		let newTitleWordsNotFound = tmpArray[0].split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "").filter(w => !commonWords.includes(w));
+		let newTitleWordsNotFound = tmpArray[0].replace(/[–−]/g, '-').split(nonWordCharactersNoParanthesis).map(w => washWord(w)).filter(w => w !== "").filter(w => !commonWords.includes(w));
 
 		const oldHistory = localStorage.getItem('history');
 		let historyArray = [];
