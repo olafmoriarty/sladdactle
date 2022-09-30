@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import GuessesTable from './GuessesTable';
 import washWord from '../functions/washWord';
 
@@ -11,6 +11,10 @@ function GuessBox(props) {
 	const parsingElements = require('../data/no_parsingElements.json');
 	const {commonWords, punctuation} = parsingElements;
 	const nonWordCharacters = new RegExp('(' + punctuation + ')');
+
+	useEffect(() => {
+		setShowHintButton(false);
+	}, [articleFetched]);
 
 	const guessWord = w => {
 		setInfobox('');
@@ -82,7 +86,7 @@ function GuessBox(props) {
 			<input type="text" name="word" value={word} onChange={(ev) => setWord(ev.target.value)} className="guess-form-input" autoComplete='off' id="guess-input" />
 			<button className="guess-form-submit" type="submit">Gjett</button>
 		</form> : false}
-		{showHintButton ? <p className="hint-button"><button onClick={() => getHint()}>Vis tilfeldig ord</button></p> : false}
+		{showHintButton || guesses.length >= 50 ? <p className="hint-button"><button onClick={() => getHint()}>Vis tilfeldig ord</button></p> : false}
 
 		<GuessesTable guesses={guesses} activeWord={activeWord} setActiveWord={setActiveWord} washWord={washWord} wordCounter={wordCounter} nextActiveWord={nextActiveWord} solved={solved} />
 		<nav className="main-menu">
